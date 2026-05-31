@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Чертёж наполнения шкафа-купе 3,6 м</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --line:#222; --muted:#666; --blue:#1565c0; --blue-bg:#e8f1fb;
+    --rod:#8a8a8a; --drawer:#eeeeee; --open:#fff8e1; --pers:#eef7ee; --red:#c62828;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);margin:0;padding:28px 24px 40px;background:#fff;}
+  h1{text-align:center;font-size:26px;font-weight:800;margin:0 0 4px;letter-spacing:.2px;}
+  .sub{text-align:center;color:var(--muted);font-size:13px;margin:0 0 24px;}
+
+  .headrow{max-width:1320px;margin:0 auto 16px;padding-left:44px;display:grid;grid-template-columns:repeat(6,1fr);gap:12px;}
+  .chip{background:var(--blue-bg);border:1.5px solid #9cc2e8;border-radius:10px;text-align:center;padding:9px 6px;box-shadow:0 1px 2px rgba(0,0,0,.06);}
+  .chip.hobby{background:var(--open);border-color:#e3cf8a;}
+  .chip b{display:block;font-size:13px;font-weight:800;}
+  .chip span{display:block;font-size:11.5px;color:#333;line-height:1.2;margin-top:1px;}
+
+  .wrap{display:flex;align-items:stretch;gap:10px;max-width:1320px;margin:0 auto;}
+  .vruler{width:34px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;}
+  .vruler .label{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;font-size:13px;white-space:nowrap;}
+
+  .grid{flex:1;height:1120px;display:grid;grid-template-columns:repeat(6,1fr);border:3px solid var(--line);border-radius:3px;overflow:hidden;}
+  .col{border-right:2px solid var(--line);display:block;}
+  .col:last-child{border-right:none;}
+  .cells{height:100%;}
+
+  .cell{overflow:hidden;border-top:1.5px solid #555;padding:5px 7px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;line-height:1.2;font-size:11.5px;}
+  .cell:first-child{border-top:none;}
+  .cell .t{font-weight:600;}
+  .cell .mm{color:var(--muted);font-size:10.5px;margin-top:1px;}
+
+  .antresol{background:#fafafa;} .antresol .t{color:#333;font-weight:700;}
+  .drawer{background:var(--drawer);}
+  .open{background:var(--open);}
+  .pers{background:var(--pers);}
+  .rodzone{background:#fff;}
+
+  .rod-label{color:var(--blue);font-weight:800;font-size:11px;border-bottom:3px solid var(--rod);width:88%;padding-bottom:3px;margin-bottom:2px;}
+  .rod-h{color:var(--muted);font-size:10px;}
+  .arrow{color:#999;font-size:13px;line-height:1;margin:2px 0;}
+  .split-shelf{border-bottom:1.5px dashed #999;width:100%;}
+
+  .hruler{max-width:1320px;margin:6px auto 0;padding-left:44px;}
+  .ticks{display:grid;grid-template-columns:repeat(6,1fr);}
+  .tick{text-align:center;font-weight:700;font-size:12px;color:#333;border-left:1px solid #bbb;padding:5px 0 3px;}
+  .tick:last-child{border-right:1px solid #bbb;}
+  .tick::before{content:"↔ ";color:#aaa;font-weight:400;}
+  .total{text-align:center;color:var(--red);font-weight:800;font-size:15px;margin:8px 0 0;letter-spacing:.3px;}
+
+  .notes{max-width:1320px;margin:22px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:12px;color:#333;}
+  .notes h3{grid-column:1/-1;font-size:13px;margin:6px 0 0;border-bottom:1px solid #ddd;padding-bottom:4px;}
+  .notes ul{margin:0;padding-left:18px;} .notes li{margin:3px 0;}
+  .legend{max-width:1320px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:#444;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:16px;height:12px;border:1px solid #888;display:inline-block;border-radius:2px;}
+  .cokol{max-width:1320px;margin:2px auto 0;padding-left:44px;color:var(--muted);font-size:11px;}
+
+  @media print{body{padding:10px;}@page{size:A3 landscape;margin:10mm;}h1{font-size:22px;}.grid{height:680px;}}
+</style>
+</head>
+<body>
+
+<h1>ЧЕРТЁЖ НАПОЛНЕНИЯ ШКАФА-КУПЕ — 3,6 м</h1>
+<p class="sub">Раскладка секций по плану · С1 у стола — длинные вещи · цвет «Мист» · глубина 600 мм</p>
+
+<div class="headrow">
+  <div class="chip"><b>СЕКЦИЯ 1</b><span>Длинные вещи · 1 штанга · у стола</span></div>
+  <div class="chip hobby"><b>СЕКЦИЯ 2</b><span>Стеллаж / хобби + тех-органайзер</span></div>
+  <div class="chip"><b>СЕКЦИЯ 3</b><span>Короткие вещи · 2 штанги</span></div>
+  <div class="chip"><b>СЕКЦИЯ 4</b><span>Личная — Он</span></div>
+  <div class="chip"><b>СЕКЦИЯ 5</b><span>Короткие вещи · 2 штанги</span></div>
+  <div class="chip"><b>СЕКЦИЯ 6</b><span>Личная — Она</span></div>
+</div>
+
+<div class="wrap">
+  <div class="vruler"><span class="label">Внутренняя высота: 2300 мм</span></div>
+
+  <div class="grid">
+
+    <!-- ===== С1 — Длинные вещи · 1 штанга (у стола) ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>чемодан, сезонное</div><div class="mm">400 мм</div></div>
+        <div class="cell rodzone" data-mm="1500">
+          <div class="rod-label">ШТАНГА ДЛИННАЯ</div><div>платья, пальто, плащи</div>
+          <div class="arrow">↕</div><div class="rod-h">~1900 от пола · 1500 мм</div>
+        </div>
+        <div class="cell" data-mm="400"><div class="t">Обувь / сапоги</div><div class="mm">400 мм</div></div>
+      </div>
+    </div>
+
+    <!-- ===== С2 — Стеллаж / хобби + тех-органайзер ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>редкое, крупные наборы</div><div class="mm">400 мм</div></div>
+        <div class="cell open" data-mm="350"><div class="t">Полка — раскраски / альбомы</div><div class="mm">350 мм</div></div>
+        <div class="cell open" data-mm="350"><div class="t">Полка — книги / наборы</div><div class="mm">350 мм</div></div>
+        <div class="cell open" data-mm="300"><div class="t">Высокая полка — наборы красок</div><div class="mm">карандаши, маркеры · 300 мм</div></div>
+        <div class="cell drawer" data-mm="300"><div class="t">Тех-органайзер (выдвижной)</div><div class="mm">кабели, зарядки · 300 мм</div></div>
+        <div class="cell drawer" data-mm="300"><div class="t">Ящик — документы</div><div class="mm">300 мм</div></div>
+        <div class="cell drawer" data-mm="300"><div class="t">Ящик — мелочи</div><div class="mm">300 мм</div></div>
+      </div>
+    </div>
+
+    <!-- ===== С3 — Короткие вещи · 2 штанги ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>сезонное, коробки</div><div class="mm">400 мм</div></div>
+        <div class="cell rodzone" data-mm="950">
+          <div class="rod-label">ШТАНГА ВЕРХНЯЯ</div><div>рубашки, блузки, топы</div>
+          <div class="arrow">↕</div><div class="rod-h">~1900 от пола · 950 мм</div>
+        </div>
+        <div class="cell rodzone" data-mm="950">
+          <div class="rod-label">ШТАНГА НИЖНЯЯ</div><div>жакеты, худи, юбки, брюки</div>
+          <div class="arrow">↕</div><div class="rod-h">~950 от пола · 950 мм</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== С4 — Личная (Он) ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="200"><div class="t">Антресоль — полка</div><div class="mm">~195 мм</div></div>
+        <div class="cell antresol split-shelf" data-mm="200"><div class="t">Антресоль — полка</div><div class="mm">~195 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — свитеры</div><div class="mm">340 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — трикотаж</div><div class="mm">340 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — джинсы</div><div class="mm">340 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 1 — бельё</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 2 — носки</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 3 — футболки</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 4 — мелочи</div><div class="mm">220 мм</div></div>
+      </div>
+    </div>
+
+    <!-- ===== С5 — Короткие вещи · 2 штанги ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>сезонное, коробки</div><div class="mm">400 мм</div></div>
+        <div class="cell rodzone" data-mm="950">
+          <div class="rod-label">ШТАНГА ВЕРХНЯЯ</div><div>худи, свитшоты, поло</div>
+          <div class="arrow">↕</div><div class="rod-h">~1900 от пола · 950 мм</div>
+        </div>
+        <div class="cell rodzone" data-mm="950">
+          <div class="rod-label">ШТАНГА НИЖНЯЯ</div><div>кардиганы, брюки, юбки</div>
+          <div class="arrow">↕</div><div class="rod-h">~950 от пола · 950 мм</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== С6 — Личная (Она) ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="200"><div class="t">Антресоль — полка</div><div class="mm">~195 мм</div></div>
+        <div class="cell antresol split-shelf" data-mm="200"><div class="t">Антресоль — полка</div><div class="mm">~195 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — свитеры</div><div class="mm">340 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — трикотаж</div><div class="mm">340 мм</div></div>
+        <div class="cell pers" data-mm="340"><div class="t">Полка — джинсы/домашнее</div><div class="mm">340 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 1 — бельё</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 2 — носки/колготки</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 3 — футболки</div><div class="mm">220 мм</div></div>
+        <div class="cell drawer" data-mm="220"><div class="t">Ящик 4 — украшения/мелочи</div><div class="mm">220 мм</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hruler">
+  <div class="ticks">
+    <div class="tick">600 мм</div><div class="tick">600 мм</div><div class="tick">600 мм</div>
+    <div class="tick">600 мм</div><div class="tick">600 мм</div><div class="tick">600 мм</div>
+  </div>
+</div>
+<p class="total">ОБЩАЯ ШИРИНА: 3600 мм (6 секций × 600 мм)</p>
+<p class="cokol">↓ Цоколь снизу ~50 мм · потолок в комнате 2350 мм · шкаф до потолка</p>
+
+<div class="legend">
+  <span><span class="sw" style="background:#fff8e1"></span> Стеллаж / хобби</span>
+  <span><span class="sw" style="background:#fafafa"></span> Антресоль</span>
+  <span><span class="sw" style="background:#eef7ee"></span> Личные полки</span>
+  <span><span class="sw" style="background:#fff"></span> Зона штанги / полка</span>
+  <span><span class="sw" style="background:#eeeeee"></span> Выдвижной ящик</span>
+  <span><span class="sw" style="border-bottom:3px solid #8a8a8a;height:6px"></span> Штанга</span>
+</div>
+
+<div class="notes">
+  <h3>Размеры и конструкция</h3>
+  <ul>
+    <li>Внутренняя высота <b>2300 мм</b>, ширина <b>3600 мм</b>, глубина <b>600 мм</b> (рабочая ~500 + механизм/двери ~100).</li>
+    <li>Все колонки точно сходятся в 2300 мм; высоты на схеме строго пропорциональны мм. Толщину ЛДСП (16–18 мм) мебельщик учтёт сам.</li>
+    <li>Линия антресоли единая по фасаду (~1900 мм от пола). В С4 и С6 верх поделён на 2 полки.</li>
+    <li>Раскладка секций — по плану заказчика. Размеры полок/ящиков подобраны по эргономическим стандартам.</li>
+  </ul>
+  <h3>Двери и стол · зонирование</h3>
+  <ul>
+    <li><b>С1 у стола — длинные вещи</b> (платья/пальто, редкий доступ). Стол в ~300 мм от торца, распашная дверь С1 открывается лишь на ~30° — для редко используемых вещей это допустимо.</li>
+    <li>Двери С2–С6 — распашные, открываются свободно. У <b>С2 (хобби)</b> — полки для раскрасок/книг, выдвижной тех-органайзер (кабели/зарядки) и ящик документов.</li>
+    <li><b>Две секции коротких вещей</b> (С3, С5) и две личные с ящиками (С4 — Он, С6 — Она).</li>
+    <li><b>LED-подсветка</b> под верхней полкой каждой секции. Постельное/полотенца, сезон, спорт и чемоданы — на другие шкафы (прихожая, лоджия).</li>
+  </ul>
+</div>
+
+<script>
+  document.querySelectorAll('.cell[data-mm]').forEach(function(c){
+    c.style.height = (parseFloat(c.dataset.mm) / 2300 * 100) + '%';
+  });
+</script>
+</body>
+</html>
