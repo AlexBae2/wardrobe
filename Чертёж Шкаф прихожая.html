@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Чертёж наполнения — шкаф в прихожей 1,37 м</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --line:#222; --muted:#666; --blue:#1565c0; --blue-bg:#e8f1fb;
+    --rod:#8a8a8a; --drawer:#eeeeee; --open:#fff8e1; --shelf:#eef7ee; --red:#c62828; --korob:#e7ded0;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);margin:0;padding:28px 24px 40px;background:#fff;}
+  h1{text-align:center;font-size:26px;font-weight:800;margin:0 0 4px;letter-spacing:.2px;}
+  .sub{text-align:center;color:var(--muted);font-size:13px;margin:0 0 24px;}
+
+  .headrow{max-width:1100px;margin:0 auto 16px;padding-left:44px;display:grid;grid-template-columns:400fr 450fr 520fr;gap:12px;}
+  .chip{background:var(--blue-bg);border:1.5px solid #9cc2e8;border-radius:10px;text-align:center;padding:9px 6px;box-shadow:0 1px 2px rgba(0,0,0,.06);}
+  .chip.korob{background:var(--korob);border-color:#cbbda3;}
+  .chip b{display:block;font-size:13px;font-weight:800;}
+  .chip span{display:block;font-size:11.5px;color:#333;line-height:1.2;margin-top:1px;}
+
+  .wrap{display:flex;align-items:stretch;gap:10px;max-width:1100px;margin:0 auto;}
+  .vruler{width:34px;flex:0 0 34px;display:flex;align-items:center;justify-content:center;}
+  .vruler .label{writing-mode:vertical-rl;transform:rotate(180deg);font-weight:700;font-size:13px;white-space:nowrap;}
+
+  .grid{flex:1;height:1120px;display:grid;grid-template-columns:400fr 450fr 520fr;border:3px solid var(--line);border-radius:3px;overflow:hidden;}
+  .col{border-right:2px solid var(--line);display:block;position:relative;}
+  .col:last-child{border-right:none;}
+  .cells{height:100%;}
+
+  .cell{overflow:hidden;border-top:1.5px solid #555;padding:5px 7px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;line-height:1.2;font-size:11.5px;}
+  .cell:first-child{border-top:none;}
+  .cell .t{font-weight:600;}
+  .cell .mm{color:var(--muted);font-size:10.5px;margin-top:1px;}
+
+  .antresol{background:#fafafa;} .antresol .t{color:#333;font-weight:700;}
+  .drawer{background:var(--drawer);}
+  .wdrawer{background:#e3edf7;} .wdrawer .t{color:#15539e;font-weight:800;}
+  .shelf{background:var(--shelf);}
+  .rodzone{background:#fff;}
+
+  .rod-label{color:var(--blue);font-weight:800;font-size:11px;border-bottom:3px solid var(--rod);width:88%;padding-bottom:3px;margin-bottom:2px;}
+  .rod-h{color:var(--muted);font-size:10px;}
+  .arrow{color:#999;font-size:13px;line-height:1;margin:2px 0;}
+
+  /* бейдж короба стояка поверх низа С1 */
+  .kobadge{position:absolute;left:6px;right:6px;bottom:6px;background:rgba(231,222,208,.92);border:1.5px dashed #b9a98a;
+    border-radius:8px;padding:6px 6px;font-size:10.5px;color:#5b4f37;text-align:center;line-height:1.25;}
+  .kobadge b{display:block;font-size:11px;color:#3f3527;}
+
+  .hruler{max-width:1100px;margin:6px auto 0;padding-left:44px;}
+  .ticks{display:grid;grid-template-columns:400fr 450fr 520fr;}
+  .tick{text-align:center;font-weight:700;font-size:12px;color:#333;border-left:1px solid #bbb;padding:5px 0 3px;}
+  .tick:last-child{border-right:1px solid #bbb;}
+  .tick::before{content:"↔ ";color:#aaa;font-weight:400;}
+  .brace{max-width:1100px;margin:2px auto 0;padding-left:44px;display:grid;grid-template-columns:400fr 970fr;}
+  .brace .b2{grid-column:2;text-align:center;color:#15539e;font-weight:700;font-size:11.5px;border-top:2px solid #9cc2e8;padding-top:3px;}
+  .total{text-align:center;color:var(--red);font-weight:800;font-size:15px;margin:8px 0 0;letter-spacing:.3px;}
+
+  .notes{max-width:1100px;margin:22px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:12px;color:#333;}
+  .notes h3{grid-column:1/-1;font-size:13px;margin:6px 0 0;border-bottom:1px solid #ddd;padding-bottom:4px;}
+  .notes ul{margin:0;padding-left:18px;} .notes li{margin:3px 0;}
+  .legend{max-width:1100px;margin:14px auto 0;display:flex;flex-wrap:wrap;gap:14px;font-size:11.5px;color:#444;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .sw{width:16px;height:12px;border:1px solid #888;display:inline-block;border-radius:2px;}
+  .cokol{max-width:1100px;margin:2px auto 0;padding-left:44px;color:var(--muted);font-size:11px;}
+
+  @media print{body{padding:10px;}@page{size:A3 landscape;margin:10mm;}h1{font-size:22px;}.grid{height:700px;}}
+</style>
+</head>
+<body>
+
+<h1>ЧЕРТЁЖ НАПОЛНЕНИЯ — ШКАФ В ПРИХОЖЕЙ 1,37 м</h1>
+<p class="sub">Объект «Достоевского 137» · ниша у входа · 3 секции · стояк зашит коробом в С1 · цвет «Мист» · глубина 550 мм</p>
+
+<div class="headrow">
+  <div class="chip korob"><b>С1 · 400 мм</b><span>Полки + стояк (короб) · своя дверь</span></div>
+  <div class="chip"><b>С2 · 450 мм</b><span>Одежда — штанга для верхней</span></div>
+  <div class="chip"><b>С3 · 520 мм</b><span>Одежда — штанга для верхней</span></div>
+</div>
+
+<div class="wrap">
+  <div class="vruler"><span class="label">Внутренняя высота: 2300 мм</span></div>
+
+  <div class="grid">
+
+    <!-- ===== С1 — полки + стояк (короб) ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>коробки, редкое</div><div class="mm">400 мм</div></div>
+        <div class="cell shelf" data-mm="300"><div class="t">Полка — сумки / рюкзаки</div><div class="mm">300 мм</div></div>
+        <div class="cell shelf" data-mm="250"><div class="t">Полка — обувь</div><div class="mm">250 мм</div></div>
+        <div class="cell shelf" data-mm="250"><div class="t">Полка — обувь</div><div class="mm">250 мм</div></div>
+        <div class="cell shelf" data-mm="250"><div class="t">Полка — обувь</div><div class="mm">250 мм</div></div>
+        <div class="cell shelf" data-mm="250"><div class="t">Полка — шапки / перчатки</div><div class="mm">250 мм</div></div>
+        <div class="cell shelf" data-mm="300"><div class="t">Полка — материалы (раскраски)</div><div class="mm">A4 · 300 мм</div></div>
+        <div class="cell shelf" data-mm="300"><div class="t">Полка нижняя — обувь / тапки</div><div class="mm">300 мм</div></div>
+      </div>
+      <div class="kobadge"><b>КОРОБ СТОЯКА 368 × 334</b>в заднем углу во всю высоту · полки глуб. ~210 перед ним · ревизионный лючок</div>
+    </div>
+
+    <!-- ===== С2 — одежда: штанга для верхней + общий низ ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>сезонное, коробки</div><div class="mm">400 мм</div></div>
+        <div class="cell rodzone" data-mm="1380">
+          <div class="rod-label">ШТАНГА — ВЕРХНЯЯ ОДЕЖДА</div><div>куртки, пальто, плащи</div>
+          <div class="arrow">↕</div><div class="rod-h">перекладина ~1850 от пола · высота зоны 1380 мм</div>
+        </div>
+        <div class="cell wdrawer" data-mm="260"><div class="t">ШИРОКИЙ ЯЩИК (общий С2+С3)</div><div class="mm">обувь · ≈970 мм · 260 мм</div></div>
+        <div class="cell wdrawer" data-mm="260"><div class="t">ШИРОКИЙ ЯЩИК (общий С2+С3)</div><div class="mm">обувь · ≈970 мм · 260 мм</div></div>
+      </div>
+    </div>
+
+    <!-- ===== С3 — одежда: штанга для верхней + общий низ ===== -->
+    <div class="col">
+      <div class="cells">
+        <div class="cell antresol" data-mm="400"><div class="t">АНТРЕСОЛЬ</div><div>сезонное, коробки</div><div class="mm">400 мм</div></div>
+        <div class="cell rodzone" data-mm="1380">
+          <div class="rod-label">ШТАНГА — ВЕРХНЯЯ ОДЕЖДА</div><div>куртки, пальто, плащи</div>
+          <div class="arrow">↕</div><div class="rod-h">перекладина ~1850 от пола · высота зоны 1380 мм</div>
+        </div>
+        <div class="cell wdrawer" data-mm="260"><div class="t">↑ продолжение широкого ящика</div><div class="mm">единый на С2+С3 · 260 мм</div></div>
+        <div class="cell wdrawer" data-mm="260"><div class="t">↑ продолжение широкого ящика</div><div class="mm">единый на С2+С3 · 260 мм</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hruler">
+  <div class="ticks">
+    <div class="tick">400 мм</div><div class="tick">450 мм</div><div class="tick">520 мм</div>
+  </div>
+</div>
+<div class="brace"><div class="b2">↑ нижние 2 ящика — единые на всю ширину блока С2+С3 ≈ 970 мм (перегородка С2/С3 идёт только до 520 мм от пола)</div></div>
+<p class="total">ОБЩАЯ ШИРИНА: 1370 мм (400 + 450 + 520)</p>
+<p class="cokol">↓ Цоколь снизу ~50 мм · потолок в нише 2350 мм · шкаф до потолка · глубина корпуса 550 мм</p>
+
+<div class="legend">
+  <span><span class="sw" style="background:#fafafa"></span> Антресоль</span>
+  <span><span class="sw" style="background:#eef7ee"></span> Открытые полки</span>
+  <span><span class="sw" style="background:#fff"></span> Зона штанги</span>
+  <span><span class="sw" style="background:#e3edf7"></span> Широкий ящик (общий С2+С3)</span>
+  <span><span class="sw" style="background:#e7ded0;border-style:dashed"></span> Короб стояка (зашит)</span>
+  <span><span class="sw" style="border-bottom:3px solid #8a8a8a;height:6px"></span> Штанга</span>
+</div>
+
+<div class="notes">
+  <h3>Размеры и конструкция</h3>
+  <ul>
+    <li>Габарит корпуса: ширина <b>1370 мм</b>, внутренняя высота <b>2300 мм</b> (потолок 2350, цоколь ~50), глубина <b>550 мм</b>.</li>
+    <li>Все три колонки точно сходятся в 2300 мм; высоты на схеме строго пропорциональны мм. Толщину ЛДСП (16–18 мм) мебельщик учтёт сам.</li>
+    <li>Ширины секций РАЗНЫЕ: С1 400, С2 450, С3 520 мм — колонки на схеме отрисованы пропорционально.</li>
+    <li>Линия антресоли единая по фасаду (~1900 мм от пола).</li>
+  </ul>
+  <h3>Стояк, ящики, двери</h3>
+  <ul>
+    <li><b>Стояк уже зашит готовым коробом 368 × 334 мм</b> в заднем левом углу С1, во всю высоту. Полки С1 — глубиной ~210 мм перед коробом; в коробе <b>ревизионный лючок</b>.</li>
+    <li><b>Нижние 2 ящика — широкие, единые на весь блок С2+С3 (≈970 мм)</b> под обувь. Перегородка С2/С3 — только выше ящиков (от 520 мм и вверх).</li>
+    <li>Двери: <b>С1 — отдельная</b> (своя створка). <b>С2 и С3 — пара-двустворка</b> (петли по краям, ручки к центру). Фасады «Мист» матовые, ручки — чёрный профиль.</li>
+    <li>Над верхней полкой — опционально LED-подсветка. Сезон/чемоданы — на лоджию.</li>
+  </ul>
+</div>
+
+<script>
+  document.querySelectorAll('.cell[data-mm]').forEach(function(c){
+    c.style.height = (parseFloat(c.dataset.mm) / 2300 * 100) + '%';
+  });
+</script>
+</body>
+</html>

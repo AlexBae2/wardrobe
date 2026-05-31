@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>3D — шкаф в прихожей (Достоевского 137, со стояком)</title>
+<style>
+  html,body{margin:0;height:100%;background:#20242b;overflow:hidden;
+    font:13px/1.4 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#e7e9ee;}
+  #ui{position:fixed;top:14px;left:14px;z-index:10;background:rgba(28,32,40,.86);
+    padding:14px 16px;border-radius:10px;max-width:330px;backdrop-filter:blur(6px);
+    max-height:94vh;overflow:auto;}
+  #ui h1{font-size:15px;margin:0 0 6px;}
+  #ui .d{color:#aab1bf;font-size:12px;margin-bottom:10px;}
+  #ui label{display:flex;align-items:center;gap:8px;font-size:12px;margin:5px 0;cursor:pointer;}
+  .leg{display:flex;align-items:center;gap:8px;font-size:12px;margin:3px 0;}
+  .sw{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid #0003;}
+  .btn{display:block;width:100%;margin:4px 0 2px;padding:9px;border:none;border-radius:8px;
+    background:#3d6ae0;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+  .btn:hover{background:#5680f0;}
+  .hint{position:fixed;bottom:12px;left:14px;color:#8a91a0;font-size:11px;z-index:10;}
+  .warn{margin-top:10px;font-size:11px;color:#e8c98a;}
+  .sec{margin-top:9px;font-size:11px;color:#c4cad6;border-top:1px solid #ffffff14;padding-top:8px;}
+  .sec b{color:#e7e9ee;}
+</style>
+</head>
+<body>
+<div id="ui">
+  <h1>Шкаф в прихожей · 1370 × 2350 × 550</h1>
+  <div class="d">Объект «Достоевского 137». Ниша у входа. Фасады «Мист» матовые + чёрные ручки-профили (по примеру мебельщика). Стояк уже зашит готовым коробом 368×334 во всю высоту в заднем левом углу — С1 огибает его полками + ревизионный лючок.</div>
+  <button class="btn" id="toggle">Открыть фасады</button>
+  <button class="btn" id="toggleDr" style="background:#3a8f5e">Выдвинуть ящики</button>
+  <label><input type="checkbox" id="cDoors" checked> Показывать фасады</label>
+  <label><input type="checkbox" id="cFill" checked> Наполнение (одежда/обувь)</label>
+  <label><input type="checkbox" id="cPipe" checked> Короб стояка (зашит) + лючок</label>
+  <label><input type="checkbox" id="cCtx" checked> Стены ниши + пол</label>
+  <div class="sec"><b>С1 (400)</b> — стопка открытых полок (глуб. ~210 перед зашитым коробом стояка): обувь, сумки, шапки, материалы. <b>Своя отдельная дверь</b> + ревизионный лючок.</div>
+  <div class="sec"><b>С2 + С3 (450 + 520)</b> — одежда: 2 штанги для верхней (полная глубина) + антресоль. <b>Двери-пара</b> (двустворка, петли по краям, ручки к центру).</div>
+  <div class="sec"><b>Низ С2+С3</b> — 2 ШИРОКИХ выдвижных ящика на всю ширину блока (~950) под обувь.</div>
+  <div style="margin-top:10px;">
+    <div class="leg"><span class="sw" style="background:#d8d0c4"></span> фасады «Мист» матовые</div>
+    <div class="leg"><span class="sw" style="background:#1b1b1d"></span> чёрные ручки-профили</div>
+    <div class="leg"><span class="sw" style="background:#cdd9ea"></span> одежда / штанга</div>
+    <div class="leg"><span class="sw" style="background:#e4d8b4"></span> обувь / ящики</div>
+    <div class="leg"><span class="sw" style="background:#cfe3c8"></span> полки / антресоль</div>
+    <div class="leg"><span class="sw" style="background:#cab9a6"></span> короб стояка (зашит) + лючок</div>
+  </div>
+  <div class="warn">Глубина 550 (макс по нише ~601). Стояк уже зашит коробом 368×334 мм во всю высоту — точный замер по плану. Перед коробом ~210 мм под полки. Антресоль единой линией ~1900.</div>
+</div>
+<div class="hint">ЛКМ — вращать · колесо — зум · ПКМ — панорама · клик по фасаду — открыть/закрыть</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ===== ЕДИНЫЙ источник данных (синхрон с чертежом) =====
+   Ниша прихожей, объект «Достоевского 137».
+   Ширина 1370 (размер 137 на плане), потолок 2350, глубина по месту до 601.
+   Стояк: замер по плану (привязка к 137) — короб 368(ширина) × 334(глубина),
+   в заднем ЛЕВОМ углу, во всю высоту. */
+const H = 2350, W = 1370, D = 550;     // мм габарит шкафа
+const T  = 18;                          // ЛДСП
+const COKOL = 80;                       // цоколь
+const ANT  = 1900;                      // линия антресоли (единая по фасаду)
+const PIPE = {w:368, d:334, px:130, pz:130, r:70};  // короб стояка (зад. левый угол) + труба
+
+// секции: x0 (левый край) и ширина; сумма ширин = W = 1370
+const SEC = [
+  {id:'С1', x0:0,   w:400, kind:'полки+стояк'},
+  {id:'С2', x0:400, w:450, kind:'одежда'},
+  {id:'С3', x0:850, w:520, kind:'одежда'},
+];
+const DRAWERTOP = 600;   // верх блока широких ящиков (общих на С2+С3), от пола
+console.assert(SEC.reduce((s,x)=>s+x.w,0)===W,'сумма ширин != W');
+
+const S = 0.001;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x20242b);
+const cam = new THREE.PerspectiveCamera(48, innerWidth/innerHeight, 0.01, 100);
+cam.position.set(1.85, 2.0, 3.45);
+const rnd = new THREE.WebGLRenderer({antialias:true});
+rnd.setSize(innerWidth, innerHeight); rnd.setPixelRatio(devicePixelRatio);
+document.body.appendChild(rnd.domElement);
+const ctrl = new OrbitControls(cam, rnd.domElement);
+ctrl.target.set(0, 1.18, 0.05); ctrl.update();
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x47506a, 1.0));
+const dir = new THREE.DirectionalLight(0xffffff, 1.05); dir.position.set(2.5,4,3); scene.add(dir);
+const dir2 = new THREE.DirectionalLight(0xccd4e6,.45); dir2.position.set(-3,2,-2); scene.add(dir2);
+
+const root = new THREE.Group();
+root.position.set(-(W*S)/2, 0, -(D*S)/2);   // z=0 — стена сзади, z=D — фасад
+scene.add(root);
+
+const matMist = new THREE.MeshStandardMaterial({color:0xd8d0c4, roughness:.86, metalness:.02}); // «Мист» матовый (по примеру мебельщика)
+const matEdge = new THREE.MeshStandardMaterial({color:0xb7ab97, roughness:.85});                // корпус/кромка, тёплый
+const matHandle = new THREE.MeshStandardMaterial({color:0x1b1b1d, metalness:.3, roughness:.55}); // чёрный профиль-ручка
+function panel(w,h,d,x,y,z,mat=matMist,parent=root){
+  const m=new THREE.Mesh(new THREE.BoxGeometry(w*S,h*S,d*S),mat);
+  m.position.set((x+w/2)*S,(y+h/2)*S,(z+d/2)*S); parent.add(m); return m;
+}
+
+/* ===== каркас ===== */
+panel(T,H,D,0,0,0);            // левая боковина
+panel(T,H,D,W-T,0,0);          // правая боковина
+panel(W,T,D,0,COKOL,0);        // дно (над цоколем)
+panel(W,T,D,0,H-T,0);          // крыша
+panel(W-2*T,COKOL,T,T,0,D-T,matEdge);   // цоколь
+panel(T,H-COKOL-T,D, SEC[1].x0-T/2, COKOL+T, 0);                       // перегородка С1|С2 (полная — С1 отдельно)
+panel(T,H-T-DRAWERTOP, D, SEC[2].x0-T/2, DRAWERTOP, 0);                // перегородка С2|С3 только ВЫШЕ блока ящиков
+panel((W-T)-(SEC[1].x0+T/2), T, D-T, SEC[1].x0+T/2, DRAWERTOP, 0, matMist); // верх блока широких ящиков (С2+С3)
+panel(W,H,4,0,0,0,new THREE.MeshStandardMaterial({color:0xc4c7c1,roughness:.9}));  // зад. стенка
+panel(W-2*T,T,D-T,T,ANT,0,matMist);     // линия антресоли по всем секциям
+
+/* ===== материалы наполнения ===== */
+const matCloth = [0x5b6b8c,0x7d5a64,0x4a6b57,0x8a7a4a,0x6a6f78];
+const matShoe  = new THREE.MeshStandardMaterial({color:0xe4d8b4,roughness:.8});
+const matShelf = new THREE.MeshStandardMaterial({color:0xcfe3c8,roughness:.7});
+const matRod   = new THREE.MeshStandardMaterial({color:0x8d9098,metalness:.6,roughness:.35});
+
+const fill = new THREE.Group(); root.add(fill);
+const drawersAnim = [];
+
+function innerX(sec){
+  const a = sec.x0 + (sec.x0===0? T : T/2);
+  const b = sec.x0 + sec.w - (sec.x0+sec.w===W? T : T/2);
+  return [a,b];
+}
+function shelf(sec,y,z0=0,dep=D-30,parent=fill){ const [a,b]=innerX(sec);
+  panel(b-a,T,dep,a,y,z0,matShelf,parent); }
+
+// выдвижной ящик (анимируется вперёд)
+function drawer(sec,y0,h){
+  const [a,b]=innerX(sec); const w=b-a;
+  const g=new THREE.Group(); fill.add(g);
+  panel(w-6,h-8,T,a+3,y0+4,D-T-2,matMist,g);
+  panel(w-20,T,D-90,a+10,y0+8,T+10,matEdge,g);
+  panel(w-20,h-22,T,a+10,y0+8,T+10,matEdge,g);
+  g.userData.z0=g.position.z; drawersAnim.push(g);
+  return g;
+}
+// ШИРОКИЙ выдвижной ящик (общий на С2+С3, под обувь) — фасад + чёрная ручка
+function wideDrawer(a,b,y0,h){
+  const w=b-a;
+  const g=new THREE.Group(); fill.add(g);
+  panel(w-6,h-8,T,a+3,y0+4,D-T-2,matMist,g);                 // широкий фасад
+  panel(w-20,T,D-90,a+10,y0+8,T+10,matEdge,g);               // дно
+  panel(w-20,h-22,T,a+10,y0+8,T+10,matEdge,g);               // задний бортик
+  const hb=new THREE.Mesh(new THREE.BoxGeometry(Math.min(w*0.4,280)*S,22*S,28*S),matHandle);
+  hb.position.set((a+w/2)*S,(y0+h/2)*S,(D-T+14)*S); g.add(hb);   // ручка-профиль по центру
+  const sh=new THREE.MeshStandardMaterial({color:0x3a3f47,roughness:.6});
+  [a+w*0.18,a+w*0.38,a+w*0.58,a+w*0.78].forEach(x=>panel(85,75,200,x-42,y0+14,D/2-30,sh,g)); // обувь
+  g.userData.z0=g.position.z; drawersAnim.push(g);
+  return g;
+}
+function hang(sec){ // штанга + висящая верхняя одежда (полная глубина)
+  const [a,b]=innerX(sec);
+  panel(b-a,12,12,a,ANT-90,D/2-6,matRod,fill);
+  const drop=1150, topY=ANT-110;
+  const n=4, step=(b-a-40)/n;
+  for(let i=0;i<n;i++){
+    const m=new THREE.MeshStandardMaterial({color:matCloth[i%matCloth.length],roughness:.85});
+    panel(step*0.72,drop,300,a+20+i*step,topY-drop,D/2-150,m,fill);
+  }
+}
+
+/* ===== С1 — стояк (зашит коробом) + стопка открытых полок перед коробом ===== */
+(function(){ const s=SEC[0]; const [a,b]=innerX(s);
+  const zFront = PIPE.d;                 // полки перед коробом стояка
+  const dep = D - PIPE.d - T - 10;       // ~190 мм глубины
+  [300,540,780,1020,1260,1500,1740, ANT+T+210].forEach(y=> panel(b-a,T,dep,a,y,zFront,matShelf,fill));
+  const boxM=new THREE.MeshStandardMaterial({color:0xb9a888,roughness:.95});
+  panel(b-a-30,140,dep-30,a+15,308,zFront+10,boxM,fill);
+  panel(b-a-30,140,dep-30,a+15,1268,zFront+10,boxM,fill);
+})();
+
+/* ===== С2 и С3 — одежда: штанги для верхней (над блоком ящиков) + антресоль ===== */
+hang(SEC[1]); hang(SEC[2]);
+shelf(SEC[1], ANT+T+210); shelf(SEC[2], ANT+T+210);
+
+/* ===== Низ С2+С3 — 2 ШИРОКИХ выдвижных ящика на всю ширину блока (обувь) ===== */
+(function(){
+  const a = SEC[1].x0 + T/2, b = W - T;           // блок ящиков общий на С2+С3
+  const hgt = (DRAWERTOP - (COKOL+T) - 8)/2;        // 2 ящика
+  let y = COKOL+T;
+  for(let i=0;i<2;i++){ wideDrawer(a,b,y,hgt); y += hgt+4; }
+})();
+
+/* ===== СТОЯК: уже ЗАШИТ готовым коробом (НЕ труба) — сплошной закрытый короб =====
+   зад. левый угол С1, точный замер 368 × 334, во всю высоту. С1 огибает его полками. */
+const pipeG=new THREE.Group(); root.add(pipeG);
+const korobMat=new THREE.MeshStandardMaterial({color:0xcab9a6,roughness:.9,metalness:.02});
+panel(PIPE.w, H-COKOL-T, PIPE.d, 0, COKOL+T, 0, korobMat, pipeG);     // сплошной короб стояка
+// ревизионный лючок (съёмная панель) на передней грани короба
+const hatchMat=new THREE.MeshStandardMaterial({color:0xb3a48f,roughness:.82});
+panel(PIPE.w-120, 440, T+3, 60, 740, PIPE.d-1, hatchMat, pipeG);
+const hh=new THREE.Mesh(new THREE.BoxGeometry(90*S,14*S,16*S),matHandle);
+hh.position.set((PIPE.w/2)*S,(740+220)*S,(PIPE.d+9)*S); pipeG.add(hh);
+
+/* ===== подписи секций (спрайты) ===== */
+function label(text,x,y,z,scale=1,bg='rgba(40,46,58,.9)'){
+  const c=document.createElement('canvas'); c.width=256; c.height=96;
+  const g=c.getContext('2d');
+  g.fillStyle=bg; roundRect(g,4,4,248,88,16); g.fill();
+  g.fillStyle='#e7e9ee'; g.font='bold 50px -apple-system,Arial'; g.textAlign='center'; g.textBaseline='middle';
+  g.fillText(text,128,50);
+  const tex=new THREE.CanvasTexture(c);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false}));
+  sp.position.set(x*S,y*S,z*S); sp.scale.set(0.34*scale,0.128*scale,1); root.add(sp); return sp;
+}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);
+  g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+SEC.forEach(s=>label(s.id, s.x0+s.w/2, H+120, D, 1));
+label('короб стояка', PIPE.w/2, 1640, D+30, 0.85, 'rgba(90,78,64,.92)');
+
+/* ===== ФАСАДЫ: распашные, по одному на секцию ===== */
+const doorsRoot=new THREE.Group(); root.add(doorsRoot);
+const matDoor=new THREE.MeshStandardMaterial({color:0xd8d0c4,roughness:.82,metalness:.02,
+  side:THREE.DoubleSide});
+const doorMeshes=[];
+function makeDoor(sec,hingeRight,yB,hgt){
+  const y0 = yB!==undefined? yB : COKOL+5;
+  const dh = hgt!==undefined? hgt : H-COKOL-10;
+  const [a,b]=[sec.x0, sec.x0+sec.w];
+  const dw=(b-a)-6;
+  const hingeX = hingeRight? b-3 : a+3;
+  const dir = hingeRight? -1 : 1;
+  const pivot=new THREE.Group(); pivot.position.set(hingeX*S,0,(D-T/2)*S); doorsRoot.add(pivot);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(dw*S,dh*S,T*S),matDoor);
+  m.position.set(dir*dw/2*S,(y0+dh/2)*S,0); pivot.add(m); doorMeshes.push(m);
+  const hb=new THREE.Mesh(new THREE.BoxGeometry(Math.min(dw*0.5,240)*S,22*S,28*S),matHandle);
+  hb.position.set(dir*dw/2*S,(y0+dh-170)*S,(T/2+14)*S); pivot.add(hb);
+  return {pivot, openTo: dir*-110*Math.PI/180, cur:0, target:0};
+}
+const dB = DRAWERTOP+6, dH = H - DRAWERTOP - 16;     // двери С2/С3 — только выше блока ящиков
+const doors=[ makeDoor(SEC[0],false),                // С1 — своя дверь на всю высоту
+              makeDoor(SEC[1],false,dB,dH),          // С2 — пара (петля слева, ручка к центру)
+              makeDoor(SEC[2],true ,dB,dH) ];         // С3 — пара (петля справа, ручка к центру)
+
+/* ===== НИША: стены + пол ===== */
+const ctx=new THREE.Group(); scene.add(ctx);
+const WT=90, CEIL=2350;
+const wallMat=new THREE.MeshStandardMaterial({color:0xddd7c9,roughness:.97});
+function wbox(w,h,d,cx,cy,cz){const m=new THREE.Mesh(new THREE.BoxGeometry(w*S,h*S,d*S),wallMat);
+  m.position.set(cx*S,cy*S,cz*S); ctx.add(m); return m;}
+const hw=W/2, hd=D/2;
+wbox(W+2*WT, CEIL, WT, 0, CEIL/2, -hd-WT/2);                       // задняя стена
+wbox(WT, CEIL, D+WT,  hw+WT/2,  CEIL/2, -hd+(D+WT)/2-WT/2);        // правая стена
+wbox(WT, CEIL, D+WT, -hw-WT/2,  CEIL/2, -hd+(D+WT)/2-WT/2);        // левая стена
+const floorMat=new THREE.MeshStandardMaterial({color:0x6a5b48,roughness:1});
+const floor=new THREE.Mesh(new THREE.PlaneGeometry((W+2*WT)*S,(D+1600)*S),floorMat);
+floor.rotation.x=-Math.PI/2; floor.position.set(0,0,(650-WT)*S); ctx.add(floor);
+
+/* ===== тогглы + клик ===== */
+const btn=document.getElementById('toggle');
+let isOpen=false;
+function flip(){ isOpen=!isOpen; doors.forEach(d=>d.target=isOpen?d.openTo:0);
+  btn.textContent=isOpen?'Закрыть фасады':'Открыть фасады'; }
+btn.onclick=flip;
+const btnDr=document.getElementById('toggleDr');
+let drOpen=false;
+btnDr.onclick=()=>{ drOpen=!drOpen; btnDr.textContent=drOpen?'Задвинуть ящики':'Выдвинуть ящики'; };
+document.getElementById('cDoors').onchange=e=>doorsRoot.visible=e.target.checked;
+document.getElementById('cFill').onchange =e=>fill.visible=e.target.checked;
+document.getElementById('cPipe').onchange =e=>pipeG.visible=e.target.checked;
+document.getElementById('cCtx').onchange  =e=>ctx.visible=e.target.checked;
+
+const ray=new THREE.Raycaster(), m2=new THREE.Vector2(); let downXY=null;
+rnd.domElement.addEventListener('pointerdown',e=>downXY=[e.clientX,e.clientY]);
+rnd.domElement.addEventListener('pointerup',e=>{
+  if(!downXY) return;
+  if(Math.hypot(e.clientX-downXY[0],e.clientY-downXY[1])>5) return;
+  m2.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1);
+  ray.setFromCamera(m2,cam);
+  if(ray.intersectObjects(doorMeshes,false).length) flip();
+});
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();
+  rnd.setSize(innerWidth,innerHeight);});
+(function loop(){
+  requestAnimationFrame(loop);
+  doors.forEach(d=>{ d.cur+=((d.target||0)-d.cur)*0.15; d.pivot.rotation.y=d.cur; });
+  const dz=(drOpen?420:0)*S;
+  drawersAnim.forEach((g,i)=>{ const t=g.userData.z0+dz*(0.6+0.4*((i%3)/2));
+    g.position.z+=(t-g.position.z)*0.15; });
+  ctrl.update(); rnd.render(scene,cam);
+})();
+</script>
+</body>
+</html>
