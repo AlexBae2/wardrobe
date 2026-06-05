@@ -89,7 +89,7 @@ sun.shadow.camera.near=1; sun.shadow.camera.far=22; sun.shadow.bias=-0.0003; sce
 const fill = new THREE.DirectionalLight('#eaf0ff', 0.3); fill.position.set(-5,3,2); scene.add(fill);
 
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.MeshStandardMaterial({ color:'#d6d1c7', roughness:0.95 }));
-floor.rotation.x = -Math.PI/2; floor.position.y = -0.05; floor.receiveShadow = true; scene.add(floor);
+floor.rotation.x = -Math.PI/2; floor.position.y = -0.10; floor.receiveShadow = true; scene.add(floor);
 
 const matBody   = new THREE.MeshStandardMaterial({ color:'#cdc6b9', roughness:0.78, metalness:0.02 });
 const matInner  = new THREE.MeshStandardMaterial({ color:'#e7e1d6', roughness:0.9 });
@@ -119,7 +119,10 @@ const DOORZ = D/2 + 0.012;
 box(W+0.02, T, D, matBody, 0, 0, 0);
 box(W+0.02, T, D, matBody, 0, H, 0);
 box(W, H, 0.012, matBack, 0, H/2, -D/2);
-box(W+0.04, 0.05, D-0.04, matBase, 0, -0.025, 0);
+// опоры (ножки) 100 мм снизу
+for(const lx of [X0+0.05, -0.6, 0.6, X0+W-0.05]) for(const lz of [-D/2+0.06, D/2-0.06]) box(0.05,0.10,0.05, matBase, lx, -0.05, lz);
+// планка-добор к потолку сверху
+box(W+0.02, 0.05, D, matBody, 0, H+0.025, 0);
 for(let i=0;i<=6;i++) box(T, H, D, matBody, X0 + i*SEC, H/2, 0);
 
 function shelf(i, yMM, mat){ box(SEC-T, T, D-0.03, mat||matShelf, cx(i), yMM/1000, -0.012, false); }
@@ -177,13 +180,13 @@ const tH = 0.74;
 box(tDepthX, 0.04, tLenZ, matWoodTop, tCenterX, tH, tCenterZ);
 const legR=tDepthX/2-0.05, legF=tLenZ/2-0.05;
 [[-legR,-legF],[legR,-legF],[-legR,legF],[legR,legF]].forEach(([dx,dz])=>{
-  box(0.05, tH, 0.05, matWood, tCenterX+dx, tH/2, tCenterZ+dz);
+  box(0.05, tH+0.10, 0.05, matWood, tCenterX+dx, (tH-0.10)/2, tCenterZ+dz);
 });
 const chX=tCenterX+tDepthX/2+0.27, chZ=tCenterZ;
 box(0.46,0.05,0.46, matChair, chX, 0.46, chZ);
 box(0.05,0.5,0.46, matChair, chX+0.205, 0.71, chZ);
 [[-0.2,-0.2],[0.2,-0.2],[-0.2,0.2],[0.2,0.2]].forEach(([dx,dz])=>{
-  box(0.05,0.46,0.05, matChair, chX+dx,0.23,chZ+dz);
+  box(0.05,0.56,0.05, matChair, chX+dx,0.18,chZ+dz);
 });
 
 // ===== РАЗМЕРЫ =====
@@ -226,6 +229,8 @@ dim([-1.8,-0.17,0.45],[1.8,-0.17,0.45],'3600 мм', dimsAll);
 dim([-1.8, 2.58,0.45],[1.8, 2.58,0.45],'3600 мм', dimsAll);
 dim([1.98,0,0.3],[1.98,2.30,0.3],'2300 мм', dimsAll);
 dim([-1.98,0.03,-0.29],[-1.98,0.03,0.29],'глубина 600', dimsAll);
+dim([1.98,-0.10,0.3],[1.98,0,0.3],'опоры 100', dimsAll, INFO);
+const plab=makeLabel('планка-добор к потолку', INFO, 0.0016); plab.position.set(0.7, H+0.16, 0.2); dimsAll.add(plab);
 dim([-1.8,0.80,tFrontZ+0.02],[-1.2,0.80,tFrontZ+0.02],'стол 600', dimsAll);
 dim([tCenterX,0.80,tBackZ],[tCenterX,0.80,tFrontZ],'стол 1200', dimsAll);
 dim([cx(0)+0.31,0.40,FRONT+0.01],[cx(0)+0.31,0.40,tBackZ],'зазор 300', dimsAll, INFO);
