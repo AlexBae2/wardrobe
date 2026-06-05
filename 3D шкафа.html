@@ -121,8 +121,8 @@ box(W+0.02, T, D, matBody, 0, H, 0);
 box(W, H, 0.012, matBack, 0, H/2, -D/2);
 // опоры (ножки) 100 мм снизу
 for(const lx of [X0+0.05, -0.6, 0.6, X0+W-0.05]) for(const lz of [-D/2+0.06, D/2-0.06]) box(0.05,0.10,0.05, matBase, lx, -0.05, lz);
-// планка-добор к потолку сверху
-box(W+0.02, 0.05, D, matBody, 0, H+0.025, 0);
+// планка-добор к потолку сверху (проём 2480: опоры 100 + корпус 2300 + планка ~80)
+box(W+0.02, 0.08, D, matBody, 0, H+0.04, 0);
 for(let i=0;i<=6;i++) box(T, H, D, matBody, X0 + i*SEC, H/2, 0);
 
 function shelf(i, yMM, mat){ box(SEC-T, T, D-0.03, mat||matShelf, cx(i), yMM/1000, -0.012, false); }
@@ -230,7 +230,7 @@ dim([-1.8, 2.58,0.45],[1.8, 2.58,0.45],'3600 мм', dimsAll);
 dim([1.98,0,0.3],[1.98,2.30,0.3],'2300 мм', dimsAll);
 dim([-1.98,0.03,-0.29],[-1.98,0.03,0.29],'глубина 600', dimsAll);
 dim([1.98,-0.10,0.3],[1.98,0,0.3],'опоры 100', dimsAll, INFO);
-const plab=makeLabel('планка-добор к потолку', INFO, 0.0016); plab.position.set(0.7, H+0.16, 0.2); dimsAll.add(plab);
+const plab=makeLabel('планка-добор (проём 2480)', INFO, 0.0016); plab.position.set(0.7, H+0.2, 0.2); dimsAll.add(plab);
 dim([-1.8,0.80,tFrontZ+0.02],[-1.2,0.80,tFrontZ+0.02],'стол 600', dimsAll);
 dim([tCenterX,0.80,tBackZ],[tCenterX,0.80,tFrontZ],'стол 1200', dimsAll);
 dim([cx(0)+0.31,0.40,FRONT+0.01],[cx(0)+0.31,0.40,tBackZ],'зазор 300', dimsAll, INFO);
