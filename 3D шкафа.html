@@ -40,7 +40,8 @@
     С3 — короткие вещи (2 штанги)<br>
     С4 — личная (Он): полки + 4 ящика<br>
     С5 — короткие вещи (2 штанги)<br>
-    С6 — личная (Она): полки + 4 ящика
+    С6 — личная (Она): полки + 4 ящика<br>
+    <b>🪞 Зеркало — средние двери (С3 и С4)</b>
   </div>
   <div class="panel note">
     С1 у стола — длинные вещи (редкий доступ). Распашная дверь С1 открывается ~30° из-за стола — для редких вещей это ОК. С2–С6 — обычные распашные, открываются свободно.
@@ -61,6 +62,7 @@
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
 
 const app = document.getElementById('app');
 const renderer = new THREE.WebGLRenderer({ antialias:true });
@@ -158,7 +160,7 @@ drawers(5,0,880,4); [880,1220,1560,1900,2100].forEach(h=>shelf(5,h));
 
 // двери: С1 ограничена столом (~30°), С2–С6 свободно.
 const doors=[];
-const doorCfg=[ {i:0,h:'L',max:0.5},{i:1,h:'R',max:1.6},{i:2,h:'L',max:1.6},{i:3,h:'R',max:1.6},{i:4,h:'L',max:1.6},{i:5,h:'R',max:1.6} ];
+const doorCfg=[ {i:0,h:'L',max:0.5},{i:1,h:'R',max:1.6},{i:2,h:'L',max:1.6,mirror:true},{i:3,h:'R',max:1.6,mirror:true},{i:4,h:'L',max:1.6},{i:5,h:'R',max:1.6} ];
 for(const cfg of doorCfg){
   const i=cfg.i, left=cfg.h==='L';
   const hingeX = left ? (cx(i)-SEC/2+0.006) : (cx(i)+SEC/2-0.006);
@@ -166,6 +168,10 @@ for(const cfg of doorCfg){
   const dw=SEC-0.012, dx=left? dw/2 : -dw/2;
   const leaf=box(dw, H-0.02, 0.02, matBody, dx, H/2, 0);
   root.remove(leaf); pivot.add(leaf); leaf.position.set(dx, H/2, 0);
+  if(cfg.mirror){
+    const refl=new Reflector(new THREE.PlaneGeometry(dw-0.06, H-0.10), {textureWidth:1024, textureHeight:1024, color:0x9aa0a0});
+    refl.position.set(dx, H/2, 0.012); pivot.add(refl);
+  }
   const hx = left ? (dx+dw/2-0.04) : (dx-dw/2+0.04);
   const handle=new THREE.Mesh(new THREE.BoxGeometry(0.022,0.9,0.025), matHandle);
   handle.position.set(hx, 1.15, 0.015); handle.castShadow=true; pivot.add(handle);
